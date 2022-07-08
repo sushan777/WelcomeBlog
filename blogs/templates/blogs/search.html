@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block body %}
+{% if searched %}
+<main class="container" style="">
+	{% for blog in blogs %}
+	<section class="row justify-content-center align-items-center">
+		<figure class="col-2">
+			<img src="/media/{{blog.image}}" class="img img-thumbnail" alt="">
+
+		</figure>
+		<div class="col-9">
+			<h4>{{blog.title}}</h4>
+			<small>{{blog.user}} | {{blog.created_date}}</small>
+			<article>
+				{{blog.summary | truncatechars:250 | safe}}
+			</article>
+			<small>
+				<a href="{% url 'detailview' blog.id %}">View</a></small>
+				{% if user.is_authenticated %}
+				{% if user.id == blog.user.id%}
+				<small>
+					<a href="{% url 'update' blog.id %}">Edit</a>
+				</small>
+
+				{% endif %}
+				{% endif %}
+				<br>
+
+				<br>
+			</div>
+		</section>
+		{% endfor %}
+
+
+	</main>
+
+{% else %}
+<h2>Searched Blog Not Found....</h2> 
+{% endif %}
+	{% endblock %}

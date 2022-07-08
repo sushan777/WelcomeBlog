@@ -1,0 +1,120 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+	{% block head %}
+	{% endblock %}
+	<title>Hello</title>
+	<link rel="stylesheet" href = "{% static 'css/bootstrap.css' %}">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+	<link rel="stylesheet" href = "{% static 'css/toastr.css' %}">
+	<script async src="{% static 'js/jquery.js' %}"></script>
+	<style type="text/css">
+
+	.navbar-nav {
+		margin-left: auto;
+	}
+	.errorlist{
+		list-style-type: none;
+		color:red;
+		font-size: 10px;
+		margin:0;
+		padding:0;
+	}
+	</style>
+	
+</head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+		<div class="container">
+			<a class="navbar-brand" href="{% url 'home' %}"><i class="fa fa-home"> &nbsp; Home</i></a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				
+				{% if user.is_authenticated %}
+				<li class="nav-item active">
+					<a class="navbar-brand" href="{% url 'view_profile' %}"><i class="fa fa-user"> &nbsp; {{ user }}</i></a>
+				</li>
+
+				{% endif %}
+				
+				<ul class="navbar-nav ml-auto">
+					{% if not user.is_authenticated %}
+					<li class="nav-item {% if page_title == 'Login' %} active{% endif %}">
+						<a class="nav-link" href="{% url 'login' %}"><i class="fa fa-sign-in-alt"> &nbsp; Login</i></a>
+					</li>
+					<li class="nav-item {% if page_title == 'Register' %} active{% endif %}">
+						<a class="nav-link " href="{% url 'register' %}"><i class="fa fa-registered"> &nbsp; Register</i></a>
+					</li>
+					{% else %}
+					<li class="nav-item" >
+						<form class ="d-flex" method=POST action="{% url 'search' %}">
+							{% csrf_token %}
+							<input class="form-control me-2" type="search" placeholder="search here..." aria-label="search" name="searched"> &nbsp; 
+							<button class="btn btn-outline-dark" type="submit">Search</button>
+						</form>
+					</li>&nbsp;
+					<li class="nav-item">
+						<a class="nav-link" href="{% url 'create' %}"><i class="fa fa-upload"> &nbsp; Post Blog</i></a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{% url 'export' %}" onclick="return confirm('Click ok to confirm')"><i class="fa fa-upload"> &nbsp; Export</i></a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{% url 'listview' %}"><i class="fa fa-list-alt"> &nbsp; List Post</i></a>
+					</li>
+					<li class="nav-item" >
+						<a class="nav-link"  href="{% url 'logout' %}"><i class="fa fa-sign-out-alt"> &nbsp; Logout</i></a>
+					</li>
+					
+
+					{% endif %}
+					
+
+				</ul>
+
+			</div>
+		</div>
+	</nav>
+	<div id ="content", name = "content", class="main">
+		<div class="row justify-content-center">
+			<div class="col-8">
+				<h1 class="mt-2" align="center">Blogger's World</h1>
+				<hr class="mt-0 mb-4">
+				{% block body %}
+				{% endblock %}
+			</div>
+		</div>
+	</div>
+	<script src="{% static 'js/toastr.min.js' %}"></script>
+	<script defer src="{% static 'js/popper.js' %}"></script>
+	<script defer src="{% static 'js/bootstrap.js' %}"></script>
+	<script defer src="{% static 'js/form_validation.js' %}"></script>
+	{% if messages %} {% for message in messages %}
+	<script>
+	toastr.{{message.tags}}("{{message}}")
+
+
+	toastr.options = {
+		"closeButton": true,
+		"debug": true,
+		"newestOnTop": true,
+		"progressBar": true,
+		"positionClass": "toast-bottom-right",
+		"preventDuplicates": true,
+		"showDuration": "300",
+		"hideDuration": "1000",
+		"timeOut": 0,
+		"extendedTimeOut": 0,
+		"showEasing": "swing",
+		"hideEasing": "linear",
+		"showMethod": "fadeIn",
+		"hideMethod": "fadeOut",
+		"tapToDismiss": false
+	};
+	</script>
+	{% endfor %} {% endif %}
+</body>
+</html>

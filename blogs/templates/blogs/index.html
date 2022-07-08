@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<main class="container" style="">
+	{% for post in posts %}
+	<section class="row justify-content-center align-items-center">
+		<figure class="col-2">
+			<img src="/media/{{post.image}}" class="img img-thumbnail" alt="">
+
+		</figure>
+		<div class="col-9">
+			<h4>{{post.title}}</h4>
+			<small>{{post.user}} | {{post.created_date}}</small>
+			<article>
+				{{post.summary | truncatechars:250 | safe}}
+			</article>
+			<small>
+				<a href="{% url 'detailview' post.id %}">View</a></small>
+				{% if user.is_authenticated %}
+				{% if user.id == post.user.id%}
+				<small>
+					<a href="{% url 'update' post.id %}">Edit</a>
+				</small>
+
+				{% endif %}
+				{% endif %}
+				<br>
+
+				<br>
+			</div>
+		</section>
+		{% endfor %}
+<br>
+
+			<ul class="pagination justify-content-center">
+				{% if posts.has_previous %}
+				<li class="page-item">
+					<a class="page-link" href="{% url 'home' %}?page={{posts.previous_page_number}}">&laquo;</a>
+				</li>
+				{% endif %}
+
+				{% for i in posts.paginator.page_range %} 
+				{% if posts.number == i %}
+				<li class="page-item active">
+					<a class="page-link"> {{ i }}</a>
+				</li>
+				{% else %}
+				<li class="page-item">
+					<a href="?page={{ i }}" class="page-link">{{ i }}</a>
+				</li>
+				{% endif %} 
+				{% endfor %}
+
+				{% if posts.has_next %}
+				<li class="page-item">
+					<a class="page-link" href="{% url 'home' %}?page={{posts.next_page_number}}" >&raquo;</a>
+				</li>
+				{% endif %}
+			</ul>
+	
+	</main>
+
+	{% endblock %}

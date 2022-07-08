@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+<html>
+{% block head %}
+<title>Edit a Blog</title>
+{% endblock %}
+<body>
+	{% block body %}
+{% if user.is_authenticated %}
+				{% if user.id == post.user.id %}
+	<form method="POST" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{form.media}}
+		{{ form.as_p }}
+		<input type="submit" value = "submit" class = "btn btn-danger">
+		<a href ="{% url 'listview' %}" class = "btn btn-primary">Back</a>
+	</form>
+{% else%}
+<div align="center">
+<h2>You are not authorized to edit this page</h2>
+<a href="{% url 'listview' %}">Go Back</a>
+</div>
+	{% endif %}
+	{% else %}
+
+	<h2>You are not allowed to edit this page</h2>
+				{% endif %}
+	{% endblock %}
+
+</body>
+</html>

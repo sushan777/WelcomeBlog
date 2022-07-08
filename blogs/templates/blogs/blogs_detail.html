@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+	{% block body %}
+  <main class="container">
+  <section class="col-12">
+    <div class="row">
+  
+<header class="mr-auto">
+  <h1>{{ object.title }}</h1>
+  <small>Category: {{ object.category }} | Published: {{ object.created_date }}</small><br>
+        <small> Edited: {{ object.modified_date }} | User: {{ object.user }}</small>
+        </header>
+      </div><br>
+      <figure>
+      <img src="/media/{{ object.image }}" width="180" height="200" class="img img-fluid">
+    </figure><br>
+    <h3>Summary</h3>
+    <article class="pt-3"> {{ object.summary | safe }}</article>
+
+  </section>
+   <br><br>  
+<div style="text-align: center">
+ <a href ="{% url 'home' %}" class = "btn btn-primary">Back</a>
+</div>
+
+{% endblock %}
+
+</body>
+</html>
